@@ -1,0 +1,324 @@
+# TiMOS-B-25.10.R1 both/x86_64 Nokia 7705 SAR Copyright (c) 2000-2025 Nokia.
+# All rights reserved. All use subject to applicable license agreements.
+# Built on Thu Oct 30 21:18:22 UTC 2025 by builder in /builds/2510B/R1/panos
+# Configuration format version 25.10 revision 0
+
+# Generated Fri Sep 11 00:35:40 2026 UTC
+
+exit all
+configure
+#--------------------------------------------------
+echo "System Configuration"
+#--------------------------------------------------
+    system
+        name "SR3"
+        snmp
+            shutdown
+        exit
+        time
+            sntp
+                shutdown
+            exit
+            zone UTC
+        exit
+    exit
+#--------------------------------------------------
+echo "System Security Configuration"
+#--------------------------------------------------
+    system
+        security
+            profile "administrative"
+                netconf
+                    base-op-authorization
+                        action
+                        cancel-commit
+                        close-session
+                        commit
+                        copy-config
+                        create-subscription
+                        delete-config
+                        discard-changes
+                        edit-config
+                        get
+                        get-config
+                        get-data
+                        get-schema
+                        kill-session
+                        lock
+                        validate
+                    exit
+                exit
+                entry 10
+                    match "configure system security"
+                    action permit
+                exit
+                entry 20
+                    match "show system security"
+                    action permit
+                exit
+                entry 30
+                    match "tools perform security"
+                    action permit
+                exit
+                entry 40
+                    match "tools dump security"
+                    action permit
+                exit
+                entry 42
+                    match "tools dump system security"
+                    action permit
+                exit
+                entry 50
+                    match "admin system security"
+                    action permit
+                exit
+                entry 100
+                    match "configure li"
+                    action deny
+                exit
+                entry 110
+                    match "show li"
+                    action deny
+                exit
+                entry 111
+                    match "clear li"
+                    action deny
+                exit
+                entry 112
+                    match "tools dump li"
+                    action deny
+                exit
+                entry 113
+                    match "tools perform system security"
+                    action permit
+                exit
+            exit
+            user "admin"
+                password "$2y$10$TQrZlpBDra86.qoexZUzQeBXDY1FcdDhGWdD9lLxMuFyPVSm0OGy6"
+                access console
+                no restricted-to-home
+                console
+                    member "administrative"
+                exit
+            exit
+            telnet
+            exit
+        exit
+    exit
+#--------------------------------------------------
+echo "Log Configuration"
+#--------------------------------------------------
+    log
+    exit
+#--------------------------------------------------
+echo "Eth-CFM Configuration"
+#--------------------------------------------------
+    eth-cfm
+        domain 5 format none level 5 admin-name "5"
+            association 105998 format icc-based name "1059980000001" admin-name "105998"
+                bridge-identifier 105998
+                exit
+            exit
+        exit
+    exit
+#--------------------------------------------------
+echo "Oper-Groups (Declarations) Configuration"
+#--------------------------------------------------
+    service
+    exit
+#--------------------------------------------------
+echo "Card Configuration"
+#--------------------------------------------------
+    card 1
+        card-type iom-sar
+        mda 1
+            mda-type m10-sfp++6-sfp
+            no shutdown
+        exit
+        no shutdown
+    exit
+#--------------------------------------------------
+echo "Connector Configuration"
+#--------------------------------------------------
+    port 1/1/c1
+        connector
+            breakout c1-10g
+        exit
+        no shutdown
+    exit
+    port 1/1/c2
+        connector
+            breakout c1-10g
+        exit
+        no shutdown
+    exit
+    port 1/1/c3
+        shutdown
+    exit
+    port 1/1/c4
+        shutdown
+    exit
+    port 1/1/c5
+        shutdown
+    exit
+    port 1/1/c6
+        shutdown
+    exit
+    port 1/1/c7
+        shutdown
+    exit
+    port 1/1/c8
+        shutdown
+    exit
+    port 1/1/c9
+        shutdown
+    exit
+    port 1/1/c10
+        shutdown
+    exit
+    port 1/1/c11
+        shutdown
+    exit
+    port 1/1/c12
+        shutdown
+    exit
+    port 1/1/c13
+        shutdown
+    exit
+    port 1/1/c14
+        shutdown
+    exit
+    port 1/1/c15
+        shutdown
+    exit
+    port 1/1/c16
+        shutdown
+    exit
+#--------------------------------------------------
+echo "Port Configuration"
+#--------------------------------------------------
+    port 1/1/c1/1
+        ethernet
+        exit
+        no shutdown
+    exit
+    port 1/1/c2/1
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port A/1
+    exit
+#--------------------------------------------------
+echo "Management Router Configuration"
+#--------------------------------------------------
+    router management
+    exit
+
+#--------------------------------------------------
+echo "Router (Network Side) Configuration"
+#--------------------------------------------------
+    router Base
+        interface "system"
+            address 10.10.10.3/32
+            no shutdown
+        exit
+        interface "toR2"
+            address 10.2.3.3/24
+            port 1/1/c1/1
+            no shutdown
+        exit
+#--------------------------------------------------
+echo "OSPFv2 Configuration"
+#--------------------------------------------------
+        ospf 0
+            area 0.0.0.0
+                interface "system"
+                    interface-type point-to-point
+                    no shutdown
+                exit
+                interface "toR2"
+                    interface-type point-to-point
+                    no shutdown
+                exit
+            exit
+            no shutdown
+        exit
+#--------------------------------------------------
+echo "LDP Configuration"
+#--------------------------------------------------
+        ldp
+            import-pmsi-routes
+            exit
+            tcp-session-parameters
+            exit
+            interface-parameters
+                interface "toR2" dual-stack
+                    ipv4
+                        no shutdown
+                    exit
+                    no shutdown
+                exit
+            exit
+            targeted-session
+            exit
+            no shutdown
+        exit
+    exit
+
+#--------------------------------------------------
+echo "Service Configuration"
+#--------------------------------------------------
+    service
+        sdp 300 mpls create
+            far-end 10.10.10.2
+            ldp
+            keep-alive
+                shutdown
+            exit
+            no shutdown
+        exit
+        customer 1 name "1" create
+            description "Default customer"
+        exit
+        epipe 105998 name "105998" customer 1 create
+            description "EPIPE - OAM Y.1731 test between Darrington and EB"
+            sap 1/1/c2/1 create
+                no shutdown
+            exit
+            spoke-sdp 300:105998 create
+                no shutdown
+            exit
+            no shutdown
+        exit
+    exit
+#--------------------------------------------------
+echo "Router (Service Side) Configuration"
+#--------------------------------------------------
+    router Base
+#--------------------------------------------------
+echo "OSPFv2 Configuration"
+#--------------------------------------------------
+        ospf 0
+            no shutdown
+        exit
+    exit
+
+#--------------------------------------------------
+echo "Log all events for service vprn, log syslog tls-client-profile Configuration"
+#--------------------------------------------------
+    log
+    exit
+#--------------------------------------------------
+echo "System Configuration Mode Configuration"
+#--------------------------------------------------
+    system
+        management-interface
+            configuration-mode classic
+        exit
+    exit
+
+exit all
+
+# Finished Fri Sep 11 00:35:40 2026 UTC

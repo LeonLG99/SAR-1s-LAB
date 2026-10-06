@@ -1,0 +1,405 @@
+# TiMOS-B-25.10.R1 both/x86_64 Nokia 7705 SAR Copyright (c) 2000-2025 Nokia.
+# All rights reserved. All use subject to applicable license agreements.
+# Built on Thu Oct 30 21:18:22 UTC 2025 by builder in /builds/2510B/R1/panos
+# Configuration format version 25.10 revision 0
+
+# Generated Wed Aug 26 23:26:58 2026 UTC
+
+exit all
+configure
+#--------------------------------------------------
+echo "System Configuration"
+#--------------------------------------------------
+    system
+        name "SR2"
+        dns
+            address-pref ipv6-first
+        exit
+        netconf
+            listen
+                no shutdown
+            exit
+        exit
+        snmp
+            streaming
+                no shutdown
+            exit
+            packet-size 9216
+        exit
+        time
+            sntp
+                shutdown
+            exit
+            zone UTC
+        exit
+    exit
+#--------------------------------------------------
+echo "System Security Configuration"
+#--------------------------------------------------
+    system
+        security
+            profile "administrative"
+                grpc
+                    rpc-authorization
+                        gnoi-cert-mgmt-rotate permit
+                        gnoi-cert-mgmt-install permit
+                        gnoi-cert-mgmt-getcert permit
+                        gnoi-cert-mgmt-revoke permit
+                        gnoi-cert-mgmt-cangenerate permit
+                        gnoi-system-setpackage permit
+                        gnoi-system-switchcontrolprocessor permit
+                        gnoi-system-reboot permit
+                        gnoi-system-rebootstatus permit
+                        gnoi-system-cancelreboot permit
+                    exit
+                exit
+                netconf
+                    base-op-authorization
+                        action
+                        cancel-commit
+                        close-session
+                        commit
+                        copy-config
+                        create-subscription
+                        delete-config
+                        discard-changes
+                        edit-config
+                        get
+                        get-config
+                        get-data
+                        get-schema
+                        kill-session
+                        lock
+                        validate
+                    exit
+                exit
+                entry 10
+                    match "configure system security"
+                    action permit
+                exit
+                entry 20
+                    match "show system security"
+                    action permit
+                exit
+                entry 30
+                    match "tools perform security"
+                    action permit
+                exit
+                entry 40
+                    match "tools dump security"
+                    action permit
+                exit
+                entry 42
+                    match "tools dump system security"
+                    action permit
+                exit
+                entry 50
+                    match "admin system security"
+                    action permit
+                exit
+                entry 100
+                    match "configure li"
+                    action deny
+                exit
+                entry 110
+                    match "show li"
+                    action deny
+                exit
+                entry 111
+                    match "clear li"
+                    action deny
+                exit
+                entry 112
+                    match "tools dump li"
+                    action deny
+                exit
+                entry 113
+                    match "tools perform system security"
+                    action permit
+                exit
+            exit
+            password
+                attempts 64 time 5 lockout 10
+            exit
+            user "admin"
+                password "$2y$10$jre8OzgLHGyFhnAe1DfUU.iBE9TtKiPdJjoQvrOJr13o5TQduBrZ6"
+                access console netconf grpc
+                no restricted-to-home
+                public-keys
+                    rsa
+                        rsa-key 32 create
+                            key-value "AAAAB3NzaC1yc2EAAAADAQABAAACAQC5qbOpeUTZpVcyZXZc+8VJtbdEDLuqOHbZI1d1JNynvtBDZnYuFsoiGFADG4aBHQ+X/IepL2MijmtT6ndaFyJAENELxwZWNz0CzYrLDp3PET5O7CUR5dSbfenHcUJTEOU+p9aJ5FtXbGAfVvt4UVE1XTkqRgdipIkzkkHWkjO7AI9CZQb3hG27c9HL2quK3bRMzu2Kx9gsPBb9soaVcbYGK6VEyD+yzGatE3Mc2j5KUhwbbuMPPkXvU7FAX5/oWiJ9lPT4sZgI7QIhpYVqZGpBGpUlPA+GfyEPDY0ycw7k6HBAQViWmouMcIJ5xq7Kj7ZpQWFKyXpOQdboEza9Lg7qZj23Cg908boqM67fcJthg6dO6vINA9IJ2Urf03X4mKHz9wF1Qij5IaauXlrmjO341we63teUY5vONHkyeYPuEHQcfEhVpNVRlkKMbTSzYL5pdEk6jIxJpRIqC/YfUURWiGb177DDhGBuVv+p+lAkAL+/nzxzSP9OiDvT8QDQIySYvYeKkvAQcfyMzXh2cNne39uSOwI/0D2T2oi9cZmajrn1/+e3WlShZee9QlGWf0Hi7mWX4cXcRQorty1MiLIjHCaV2TfcL7+U9ESByXBS52mT25wli6nvY1Gv6PYYSpY0ZaKsYeVKSieiZMl9YyLqjzQ9KIAsK8nNJkHLa4k0cw=="
+                        exit
+                    exit
+                exit
+                console
+                    member "administrative"
+                exit
+            exit
+            snmp
+                community "76HzdddhlPpRo1Vql+ZB5spLqccgYQ==" hash2 r version v2c
+            exit
+            telnet
+            exit
+        exit
+    exit
+#--------------------------------------------------
+echo "System Login Control Configuration"
+#--------------------------------------------------
+    system
+        login-control
+            pre-login-message "................................................................\n:                  Welcome to Nokia SR OS!                     :\n:                                                              :\n:                                                              :\n: YANG:          https://yangbrowser.nokia.com/sros            :\n: Community:     https://containerlab.dev/community/           :\n: Discord:       https://containerlab.dev/discord/             :\n................................................................\n"
+            login-banner
+        exit
+    exit
+#--------------------------------------------------
+echo "Log Configuration"
+#--------------------------------------------------
+    log
+    exit
+#--------------------------------------------------
+echo "System gRPC Configuration"
+#--------------------------------------------------
+    system
+        grpc
+            allow-unsecure-connection
+            gnoi
+                cert-mgmt
+                    no shutdown
+                exit
+                file
+                    no shutdown
+                exit
+                system
+                    no shutdown
+                exit
+            exit
+            md-cli
+                no shutdown
+            exit
+            no shutdown
+        exit
+    exit
+#--------------------------------------------------
+echo "Eth-CFM Configuration"
+#--------------------------------------------------
+    eth-cfm
+        domain 5 format none level 5 admin-name "5"
+            association 105998 format icc-based name "1059980000001" admin-name "105998"
+                bridge-identifier 105998
+                exit
+            exit
+        exit
+    exit
+#--------------------------------------------------
+echo "Oper-Groups (Declarations) Configuration"
+#--------------------------------------------------
+    service
+    exit
+#--------------------------------------------------
+echo "Card Configuration"
+#--------------------------------------------------
+    card 1
+        card-type iom-sar
+        mda 1
+            mda-type m10-sfp++6-sfp
+            no shutdown
+        exit
+        no shutdown
+    exit
+#--------------------------------------------------
+echo "Connector Configuration"
+#--------------------------------------------------
+    port 1/1/c1
+        connector
+            breakout c1-10g
+        exit
+        no shutdown
+    exit
+    port 1/1/c2
+        connector
+            breakout c1-10g
+        exit
+        no shutdown
+    exit
+    port 1/1/c3
+        shutdown
+    exit
+    port 1/1/c4
+        shutdown
+    exit
+    port 1/1/c5
+        shutdown
+    exit
+    port 1/1/c6
+        shutdown
+    exit
+    port 1/1/c7
+        shutdown
+    exit
+    port 1/1/c8
+        shutdown
+    exit
+    port 1/1/c9
+        shutdown
+    exit
+    port 1/1/c10
+        shutdown
+    exit
+    port 1/1/c11
+        shutdown
+    exit
+    port 1/1/c12
+        shutdown
+    exit
+    port 1/1/c13
+        shutdown
+    exit
+    port 1/1/c14
+        shutdown
+    exit
+    port 1/1/c15
+        shutdown
+    exit
+    port 1/1/c16
+        shutdown
+    exit
+#--------------------------------------------------
+echo "Port Configuration"
+#--------------------------------------------------
+    port 1/1/c1/1
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/1/c2/1
+        ethernet
+        exit
+        no shutdown
+    exit
+    port A/1
+    exit
+#--------------------------------------------------
+echo "Management Router Configuration"
+#--------------------------------------------------
+    router management
+    exit
+
+#--------------------------------------------------
+echo "Router (Network Side) Configuration"
+#--------------------------------------------------
+    router Base
+        interface "system"
+            address 10.10.10.2/32
+            no shutdown
+        exit
+        interface "toR3"
+            address 10.2.3.2/24
+            port 1/1/c2/1
+            no shutdown
+        exit
+#--------------------------------------------------
+echo "OSPFv2 Configuration"
+#--------------------------------------------------
+        ospf 0
+            area 0.0.0.0
+                interface "system"
+                    interface-type point-to-point
+                    no shutdown
+                exit
+                interface "toR3"
+                    interface-type point-to-point
+                    no shutdown
+                exit
+            exit
+            no shutdown
+        exit
+#--------------------------------------------------
+echo "LDP Configuration"
+#--------------------------------------------------
+        ldp
+            import-pmsi-routes
+            exit
+            tcp-session-parameters
+            exit
+            interface-parameters
+                interface "toR3" dual-stack
+                    ipv4
+                        no shutdown
+                    exit
+                    no shutdown
+                exit
+            exit
+            targeted-session
+            exit
+            no shutdown
+        exit
+    exit
+
+#--------------------------------------------------
+echo "Service Configuration"
+#--------------------------------------------------
+    service
+        sdp 300 mpls create
+            far-end 10.10.10.3
+            ldp
+            keep-alive
+                shutdown
+            exit
+            no shutdown
+        exit
+        customer 1 name "1" create
+            description "Default customer"
+        exit
+        epipe 105998 name "105998" customer 1 create
+            description "EPIPE - OAM Y.1731 test between Darrington and EB"
+            sap 1/1/c1/1 create
+                eth-cfm
+                    mep 1 domain 5 association 105998
+                        ccm-enable
+                        no shutdown
+                    exit
+                exit
+                no shutdown
+            exit
+            spoke-sdp 300:105998 create
+                eth-cfm
+                    mep 20 domain 5 association 105998
+                        shutdown
+                    exit
+                exit
+                no shutdown
+            exit
+            no shutdown
+        exit
+    exit
+#--------------------------------------------------
+echo "Router (Service Side) Configuration"
+#--------------------------------------------------
+    router Base
+#--------------------------------------------------
+echo "OSPFv2 Configuration"
+#--------------------------------------------------
+        ospf 0
+            no shutdown
+        exit
+    exit
+
+#--------------------------------------------------
+echo "Log all events for service vprn, log syslog tls-client-profile Configuration"
+#--------------------------------------------------
+    log
+    exit
+#--------------------------------------------------
+echo "System Configuration Mode Configuration"
+#--------------------------------------------------
+    system
+        management-interface
+            configuration-mode classic
+        exit
+    exit
+
+exit all
+
+# Finished Wed Aug 26 23:26:59 2026 UTC
