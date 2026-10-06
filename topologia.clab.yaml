@@ -1,0 +1,40 @@
+name: Sim-LAB-TEST222
+
+topology:
+
+  nodes:
+    SR1:
+      kind: nokia_srsim
+      type: sar-1
+      license: /root/TAC/Clab/Licenses/SR_SIM25_1.txt
+      image: localhost/nokia/srsim:25.10.R1
+
+    SR2:
+      kind: nokia_srsim
+      type: sar-1
+
+      license: /root/TAC/Clab/Licenses/SR_SIM25_1.txt
+      image: localhost/nokia/srsim:25.10.R1
+
+    SR3:
+      kind: nokia_srsim
+      type: sar-1
+      license: /root/TAC/Clab/Licenses/SR_SIM25_1.txt
+      image: localhost/nokia/srsim:25.10.R1
+
+    SR4:
+      kind: nokia_srsim
+      type: sar-1
+      license: /root/TAC/Clab/Licenses/SR_SIM25_1.txt
+      image: localhost/nokia/srsim:25.10.R1
+      
+    client1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+
+  links:
+    - endpoints: [ "SR1:1/1/1", "SR2:1/1/1" ]
+    - endpoints: [ "SR2:1/1/2", "SR3:1/1/1" ]
+    - endpoints: [ "SR3:1/1/2", "SR4:1/1/1" ]
+    - endpoints: [ "SR1:1/1/2", "SR4:1/1/2" ]
+    - endpoints: [ "SR4:1/1/3", "client1:eth1" ]
