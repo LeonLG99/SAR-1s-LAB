@@ -3,7 +3,7 @@
 # Built on Thu Oct 30 21:18:22 UTC 2025 by builder in /builds/2510B/R1/panos
 # Configuration format version 25.10 revision 0
 
-# Generated Thu Oct  1 01:11:58 2026 UTC
+# Generated Thu Oct  1 01:31:25 2026 UTC
 
 exit all
 configure
@@ -252,6 +252,11 @@ echo "OSPFv2 Configuration"
                     interface-type point-to-point
                     no shutdown
                 exit
+                interface "toPC"
+                    passive
+                    interface-type point-to-point
+                    no shutdown
+                exit
                 interface "toR1"
                     interface-type point-to-point
                     no shutdown
@@ -283,6 +288,27 @@ echo "OSPFv2 Configuration"
         ospf 0
             no shutdown
         exit
+#--------------------------------------------------
+echo "Policy Configuration"
+#--------------------------------------------------
+        policy-options
+            begin
+            prefix-list "tester"
+                prefix 10.4.10.0/24 exact
+            exit
+            policy-statement "TO-OSPF"
+                entry 10
+                    from
+                        protocol direct
+                        prefix-list "tester"
+                    exit
+                    to
+                        protocol ospf
+                    exit
+                exit
+            exit
+            commit
+        exit
     exit
 
 #--------------------------------------------------
@@ -301,4 +327,4 @@ echo "System Configuration Mode Configuration"
 
 exit all
 
-# Finished Thu Oct  1 01:11:58 2026 UTC
+# Finished Thu Oct  1 01:31:25 2026 UTC

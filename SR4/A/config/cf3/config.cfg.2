@@ -3,7 +3,7 @@
 # Built on Thu Oct 30 21:18:22 UTC 2025 by builder in /builds/2510B/R1/panos
 # Configuration format version 25.10 revision 0
 
-# Generated Thu Oct  1 01:24:27 2026 UTC
+# Generated Fri Oct  2 03:04:43 2026 UTC
 
 exit all
 configure
@@ -240,6 +240,7 @@ echo "Router (Network Side) Configuration"
             port 1/1/c1/1
             no shutdown
         exit
+        autonomous-system 6500
 #--------------------------------------------------
 echo "OSPFv2 Configuration"
 #--------------------------------------------------
@@ -253,8 +254,9 @@ echo "OSPFv2 Configuration"
                     no shutdown
                 exit
                 interface "toPC"
-                    shutdown
+                    passive
                     interface-type point-to-point
+                    no shutdown
                 exit
                 interface "toR1"
                     interface-type point-to-point
@@ -308,6 +310,21 @@ echo "Policy Configuration"
             exit
             commit
         exit
+#--------------------------------------------------
+echo "BGP Configuration"
+#--------------------------------------------------
+        bgp
+            local-as 6500
+            group "iBGP"
+                family ipv4
+                local-as 6500
+                peer-as 6500
+                neighbor 10.10.10.1
+                    peer-as 6500
+                exit
+            exit
+            no shutdown
+        exit
     exit
 
 #--------------------------------------------------
@@ -326,4 +343,4 @@ echo "System Configuration Mode Configuration"
 
 exit all
 
-# Finished Thu Oct  1 01:24:27 2026 UTC
+# Finished Fri Oct  2 03:04:43 2026 UTC

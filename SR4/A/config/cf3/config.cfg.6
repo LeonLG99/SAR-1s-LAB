@@ -3,7 +3,7 @@
 # Built on Thu Oct 30 21:18:22 UTC 2025 by builder in /builds/2510B/R1/panos
 # Configuration format version 25.10 revision 0
 
-# Generated Fri Sep 11 00:52:14 2026 UTC
+# Generated Wed Sep 30 22:50:22 2026 UTC
 
 exit all
 configure
@@ -142,7 +142,10 @@ echo "Connector Configuration"
         no shutdown
     exit
     port 1/1/c3
-        shutdown
+        connector
+            breakout c1-10g
+        exit
+        no shutdown
     exit
     port 1/1/c4
         shutdown
@@ -196,6 +199,11 @@ echo "Port Configuration"
         exit
         no shutdown
     exit
+    port 1/1/c3/1
+        ethernet
+        exit
+        no shutdown
+    exit
     port A/1
     exit
 #--------------------------------------------------
@@ -208,8 +216,17 @@ echo "Management Router Configuration"
 echo "Router (Network Side) Configuration"
 #--------------------------------------------------
     router Base
+        interface "loopy1"
+            address 4.4.4.4/32
+            loopback
+            no shutdown
+        exit
         interface "system"
             address 10.10.10.4/32
+            no shutdown
+        exit
+        interface "toPC"
+            address 10.4.10.4/24
             no shutdown
         exit
         interface "toR1"
@@ -228,6 +245,10 @@ echo "OSPFv2 Configuration"
         ospf 0
             area 0.0.0.0
                 interface "system"
+                    no shutdown
+                exit
+                interface "loopy1"
+                    interface-type point-to-point
                     no shutdown
                 exit
                 interface "toR1"
@@ -279,4 +300,4 @@ echo "System Configuration Mode Configuration"
 
 exit all
 
-# Finished Fri Sep 11 00:52:14 2026 UTC
+# Finished Wed Sep 30 22:50:22 2026 UTC

@@ -3,7 +3,7 @@
 # Built on Thu Oct 30 21:18:22 UTC 2025 by builder in /builds/2510B/R1/panos
 # Configuration format version 25.10 revision 0
 
-# Generated Wed Aug 26 00:35:46 2026 UTC
+# Generated Wed Aug 26 00:42:51 2026 UTC
 
 exit all
 configure
@@ -230,10 +230,16 @@ echo "Card Configuration"
 echo "Connector Configuration"
 #--------------------------------------------------
     port 1/1/c1
-        shutdown
+        connector
+            breakout c1-10g
+        exit
+        no shutdown
     exit
     port 1/1/c2
-        shutdown
+        connector
+            breakout c1-10g
+        exit
+        no shutdown
     exit
     port 1/1/c3
         shutdown
@@ -340,6 +346,16 @@ echo "Connector Configuration"
 #--------------------------------------------------
 echo "Port Configuration"
 #--------------------------------------------------
+    port 1/1/c1/1
+        ethernet
+        exit
+        no shutdown
+    exit
+    port 1/1/c2/1
+        ethernet
+        exit
+        no shutdown
+    exit
     port A/1
     exit
     port A/3
@@ -370,6 +386,11 @@ echo "Router (Network Side) Configuration"
 #--------------------------------------------------
     router Base
         interface "system"
+            no shutdown
+        exit
+        interface "toPE"
+            address 10.3.4.4/24
+            port 1/1/c1/1
             no shutdown
         exit
     exit
@@ -404,4 +425,4 @@ echo "System Configuration Mode Configuration"
 
 exit all
 
-# Finished Wed Aug 26 00:35:46 2026 UTC
+# Finished Wed Aug 26 00:42:51 2026 UTC
